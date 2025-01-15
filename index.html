@@ -1,108 +1,209 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectroMart - Toko Elektronik Online</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>AI Character-by-Character Interface</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+        }
+        .chat-container {
+            background-color: #16213e;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            padding: 20px;
+        }
+        #chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #0f3460;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #0f3460;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #533483;
+            color: white;
+            text-align: right;
+        }
+        .ai-message {
+            background-color: #0f3460;
+            color: #e0e0e0;
+            text-align: left;
+        }
+        #user-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #0f3460;
+            border: 1px solid #533483;
+            color: white;
+        }
+        #send-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #533483;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .typing-cursor {
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">ElectroMart</div>
-            <ul class="nav-links">
-                <li><a href="#home">Beranda</a></li>
-                <li><a href="#products">Produk</a></li>
-                <li><a href="#about">Tentang Kami</a></li>
-                <li><a href="#contact">Kontak</a></li>
-            </ul>
-            <div class="cart-icon" id="cartIcon">
-                <i data-lucide="shopping-cart"></i>
-                <span class="cart-count">0</span>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <section id="home">
-            <div class="hero">
-                <h1>Selamat Datang di ElectroMart</h1>
-                <p>Temukan peralatan elektronik terbaik untuk kebutuhan Anda</p>
-                <a href="#products" class="cta-button">Belanja Sekarang</a>
-            </div>
-        </section>
-
-        <section id="products">
-            <h2>Produk Unggulan</h2>
-            <div class="product-grid">
-                <!-- Produk akan ditambahkan melalui JavaScript -->
-            </div>
-        </section>
-
-        <section id="about">
-            <h2>Tentang Kami</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>ElectroMart adalah toko elektronik online terpercaya yang menyediakan berbagai peralatan elektronik berkualitas tinggi. Kami berkomitmen untuk memberikan pengalaman berbelanja yang terbaik bagi pelanggan kami.</p>
-                </div>
-                <div class="about-image">
-                    <img src="/placeholder.svg?height=300&width=400" alt="Tentang ElectroMart">
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2>Hubungi Kami</h2>
-            <form id="contactForm">
-                <input type="text" name="name" placeholder="Nama Anda" required>
-                <input type="email" name="email" placeholder="Email Anda" required>
-                <textarea name="message" placeholder="Pesan Anda" required></textarea>
-                <button type="submit">Kirim Pesan</button>
-            </form>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>ElectroMart</h3>
-                <p>Toko elektronik online terpercaya</p>
-            </div>
-            <div class="footer-section">
-                <h3>Tautan Cepat</h3>
-                <ul>
-                    <li><a href="#home">Beranda</a></li>
-                    <li><a href="#products">Produk</a></li>
-                    <li><a href="#about">Tentang Kami</a></li>
-                    <li><a href="#contact">Kontak</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Ikuti Kami</h3>
-                <div class="social-icons">
-                    <a href="#" aria-label="Facebook"><i data-lucide="facebook"></i></a>
-                    <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
-                    <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2023 ElectroMart. Hak Cipta Dilindungi.
-        </div>
-    </footer>
-
-    <div id="cartModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Keranjang Belanja</h2>
-            <div id="cartItems"></div>
-            <div id="cartTotal"></div>
-            <button id="checkoutBtn">Checkout</button>
-        </div>
+    <div class="chat-container">
+        <h1>AI Character-by-Character Chat</h1>
+        
+        <div id="chat-messages"></div>
+        
+        <input 
+            type="text" 
+            id="user-input" 
+            placeholder="Type your message..."
+        >
+        <button id="send-btn">Send</button>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+    class AICommunicationInterface {
+        constructor() {
+            this.chatMessages = document.getElementById('chat-messages');
+            this.userInput = document.getElementById('user-input');
+            this.sendBtn = document.getElementById('send-btn');
+
+            // Bind events
+            this.sendBtn.addEventListener('click', () => this.sendMessage());
+            this.userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.sendMessage();
+            });
+        }
+
+        // Menambahkan pesan pengguna
+        addUserMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'user-message');
+            messageElement.textContent = message;
+            
+            this.chatMessages.appendChild(messageElement);
+            this.scrollToBottom();
+        }
+
+        // Menambahkan pesan AI dengan efek mengetik
+        addAIMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'ai-message');
+            
+            // Tambahkan elemen untuk menampilkan pesan
+            this.chatMessages.appendChild(messageElement);
+            this.scrollToBottom();
+
+            // Efek mengetik karakter per karakter
+            this.typeWriterEffect(messageElement, message);
+        }
+
+        // Efek mengetik karakter per karakter
+        typeWriterEffect(element, text, speed = 50) {
+            element.innerHTML = ''; // Bersihkan konten
+            let index = 0;
+
+            // Tambahkan kursor berkedip
+            const cursor = document.createElement('span');
+            cursor.classList.add('typing-cursor');
+            cursor.innerHTML = '|';
+            element.appendChild(cursor);
+
+            const typeCharacter = () => {
+                if (index < text.length) {
+                    // Sisipkan karakter sebelum kursor
+                    element.insertBefore(
+                        document.createTextNode(text.charAt(index)), 
+                        cursor
+                    );
+                    index++;
+                    
+                    // Lanjutkan mengetik
+                    setTimeout(typeCharacter, speed);
+                } else {
+                    // Hapus kursor setelah selesai
+                    element.removeChild(cursor);
+                }
+            };
+
+            // Mulai efek mengetik
+            typeCharacter();
+        }
+
+        // Scroll ke bawah
+        scrollToBottom() {
+            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        }
+
+        // Mengirim pesan ke server
+        async sendMessage() {
+            const userMessage = this.userInput.value.trim();
+            
+            if (!userMessage) return;
+
+            // Tampilkan pesan pengguna
+            this.addUserMessage(userMessage);
+            
+            // Kosongkan input
+            this.userInput.value = '';
+
+            try {
+                // Kirim pesan ke server
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        message: userMessage,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                // Periksa respon dari server
+                if (!response.ok) {
+                    throw new Error('Gagal mendapatkan respon dari server');
+                }
+
+                // Parse respon JSON
+                const data = await response.json();
+
+                // Tampilkan respon AI dengan efek mengetik
+                this.addAIMessage(data.response);
+
+            } catch (error) {
+                // Tangani error
+                this.addAIMessage(`Error: ${error.message}`);
+                console.error('Error:', error);
+            }
+        }
+    }
+
+    // Inisialisasi interface
+    document.addEventListener('DOMContentLoaded', () => {
+        new AICommunicationInterface();
+    });
+    </script>
 </body>
 </html>
-
